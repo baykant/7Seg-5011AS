@@ -3,7 +3,15 @@
  * 13.03.2019 Baykan T. baykant@gmail.com
  * 
  */
+
+// uncomment below for DEBUG output 
 //#define DEBUG
+
+// segmentBits[] can be used with PORTD directly if connections as follows
+// a = D0, b = D1, c = D2, d = D3
+// e = D4, e = D5, f = D6, dp = D7
+// If only PORTD (D0-D7) is used, do not define DEBUG, also disconnect D0, D1 for program upload. 
+
 const byte segmentBits [] {
   B00111111, // 0
   B00000110, // 1
@@ -23,6 +31,8 @@ const byte segmentBits [] {
   B01110001, // F
 };
 
+
+// used for e = D8, f = D9, g = D10, dp = D11 
 const byte upperSegmentBits [] {
   B00000011, // 0
   B00000000, // 1
@@ -42,6 +52,7 @@ const byte upperSegmentBits [] {
   B00000111, // F
 };
 
+// used for a = D4, b = D5, c = D6, d = D7
 const byte lowerSegmentBits [] {
   B11110000, // 0
   B01100000, // 1
@@ -69,14 +80,14 @@ void writeSegment(int value) {
 #ifdef DEBUG
   Serial.println(PORTD);
 #endif  
-  PORTD &= ~(B11110000); // clear lower bits
+  PORTD &= ~(B11110000); // clear lower bits D4-D7, do not change other PORTD bits
 #ifdef DEBUG
-  Serial.println(PORTD);
+  Serial.println(PORTD); // set bits for D4-D7 in PORTD
 #endif  
-  PORTB &= ~(B00001111); // clear upper bits
+  PORTB &= ~(B00001111); // clear upper bits D8-D11, do not change other PORTB bits
   PORTD |= lowerSegmentBits[value];
 #ifdef DEBUG
-  Serial.println(PORTD);
+  Serial.println(PORTD); // set bits for D8-D11 in PORTB
 #endif  
   PORTB |= upperSegmentBits[value];  
 }
